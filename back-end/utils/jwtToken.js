@@ -8,10 +8,14 @@ const sendToken =( user,statusCode, res)=>{
         httpOnly: true,
     };
 
-    res.status(statusCode).cookie("token",options).json({
-        message: true,
-        user,
-        token
-    });
+    
+    res
+        .status(statusCode)
+        .cookie("token", token, options) // Specify the cookie name and token value
+        .json({
+            message: true,
+            user,
+            token
+        });
 };
 module.exports = sendToken;

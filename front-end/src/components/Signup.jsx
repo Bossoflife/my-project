@@ -4,24 +4,29 @@ import styles from "../styles/styles.js";
 import { Link, useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
-import { server } from "../server.js";
+import { server } from "../server.js"; 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState("");
   const [avatar, setAvatar] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    const file = e.target.files[0]
-    setAvatar(file)
+    const file = e.target.files[0];
+    setAvatar(file);
   };
 
   const handleSubmit = async (e) => {
-    const config = {headers: {
-      "Content-Type": "multipart/form-data",
-    },}
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
     e.preventDefault();
     try {
       const newForm = new FormData();
@@ -30,20 +35,23 @@ const Signup = () => {
       newForm.append("email", email);
       newForm.append("password", password);
 
-      const response = await axios.post(`${server}/user/create-user`, newForm, config);
-      
-        if(response.data.success === true){
-          alert(response.message)
-          navigate("/")
-          console.log(response)
-        }
+      const response = await axios.post(
+        `${server}/user/create-user`,
+        newForm,
+        config
+      );
+
+      if (response.data.success === true) {
+        alert(response.message);
+        navigate("/");
+        console.log(response);
+      }
     } catch (error) {
-      console.log("Error:", error.message);
+      toast.error( error.response.data.message);
       // Handle other error cases
     }
   };
 
- 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
